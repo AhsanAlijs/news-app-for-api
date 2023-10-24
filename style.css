@@ -39,7 +39,6 @@ body{
     align-items: center;
     justify-content: space-evenly;
     flex-wrap: wrap;
-    /* gap: 20px; */
 }
 .head{
     margin-top:-130px;
@@ -49,4 +48,12 @@ body{
 }
 .logo{
     width:130px;
+}
+
+.main-java{
+    height:8rem;
+    margin-bottom: 20rem;
+}
+.js-img{
+    width:20px;
 }
