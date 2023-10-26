@@ -1,38 +1,43 @@
 const form = document.querySelector('#form');
-const search = document.querySelector('#search')
-const card = document.querySelector('.card-main');
-let allNews;
-function renderNews() {
-    allNews.forEach((item) => {
-        card.innerHTML += ` 
-        <div class="main-java">
-        
-        <div class="card mt-3 main-js" style="width: 18rem;">
-        <img src="${item.urlToImage ? item.urlToImage : 'https://media.gettyimages.com/id/1311148884/vector/abstract-globe-background.jpg?s=612x612&w=gi&k=20&c=G5uPfn2VTF3aXCr76pn1T7oWE-aHVQ0rAYMl_MK2OvM='}" class="card-img-top" alt="..." class="js-img">
-        <div class="card-body">
-            <h5 class="card-title">${item.title}e</h5>
-            <p class="card-text">${item.description.slice(0, 30)}......</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-        </div>
-    </div>
+const input = document.querySelector('.search');
+const div = document.querySelector('#main-news');
+const text = document.querySelector('.load');
+const found = document.querySelector('.error');
+let newsArry = [];
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-        </div>
-
-        `
-    })
-}
-async function getNews() {
-    const searchValue = search.value;
+    text.style.display = 'block'
     try {
-
-        const news = await fetch(`https://newsapi.org/v2/everything?q=karachi&apiKey=b91dd222bbd54278a82017a30d38b181`);
-        const res = await news.json()
-        console.log(res.articles);
-        allNews = res.articles;
-        renderNews();
+        const news = await axios.get(`https://newsapi.org/v2/everything?q=${input.value}&apiKey=05922d575a1c461290656cb5d727d1d7`);
+        // console.log(news.data.articles);
+        newsArry = news.data.articles
+        console.log(newsArry);
+        newsArry.forEach((item, index) => {
+            div.innerHTML += `
+            <div class="news">
+            <img src="${item.urlToImage ? item.urlToImage : `https://images.pexels.com/photos/3944377/pexels-photo-3944377.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1`}" alt="" class="news-img">
+            <h2>${item.title.slice(0, 10)}....</h2>
+            <p>${item.description.slice(0, 50)}....</p>
+            <button class="card-btn" onclick="oneNews(${index})">Read More</button>
+            </div>
+            `
+        })
     } catch (error) {
-        console.log(error);
+        alert('Sorry not News Found')
+
     }
+    finally {
+        text.style.display = 'none'
+        input.value = ''
+    }
+
+});
+function oneNews(index) {
+    let newsData = newsArry[index];
+    console.log(newsData);
+    const news = JSON.stringify(newsData)
+    localStorage.setItem('newsData', news)
+    window.location = 'fullnews.html'
 }
 
-getNews()
